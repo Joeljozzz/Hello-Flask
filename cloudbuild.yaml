@@ -1,0 +1,54 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'northamerica-northeast2-docker.pkg.dev/assignments-441512/joel-container/hello:$COMMIT_SHA', '.']
+  
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'northamerica-northeast2-docker.pkg.dev/assignments-441512/joel-container/hello:$COMMIT_SHA']
+
+  
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        gcloud run deploy joeljose-cloudbuild \
+        --image northamerica-northeast2-docker.pkg.dev/assignments-441512/joel-container/hello:$COMMIT_SHA \
+        --platform managed \
+        --region us-central1 \
+        --allow-unauthenticated
+
+  - name: 'ubuntu'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        echo "COMMIT_SHA: $COMMIT_SHA"
+        echo "SHORT_SHA: $SHORT_SHA"
+        echo "BRANCH_NAME: $BRANCH_NAME"
+        echo "REPO_NAME: $REPO_NAME"
+
+  - name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        gcloud auth configure-docker northamerica-northeast2-docker.pkg.dev
+        gcloud compute ssh joel-jose-flask-instance \
+          --zone=northamerica-northeast2-a \
+          --command='
+            docker pull northamerica-northeast2-docker.pkg.dev/assignments-441512/joel-container/hello:latest
+            
+            sudo docker stop special-container || true
+            sudo docker rm special-container || true
+            
+            sudo docker run -d \
+              --name special-container \
+              -p 80:5000 \
+              northamerica-northeast2-docker.pkg.dev/assignments-441512/joel-container/hello:latest
+          '
+
+images:
+  - 'northamerica-northeast2-docker.pkg.dev/assignments-441512/joel-container/hello:$COMMIT_SHA'
+
+options:
+  logging: CLOUD_LOGGING_ONLY
