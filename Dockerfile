@@ -15,4 +15,4 @@ COPY app.py .
 EXPOSE 8080
 
 # Use exec form of CMD to allow graceful shutdown
-CMD ["gunicorn", "--bind", "0.0.0.0:5000", "app:app"]
+CMD ["gunicorn", "--bind", "0.0.0.0:8080", "app:app"]
