@@ -12,7 +12,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY app.py .
 
 # Expose port
-EXPOSE 5000
+EXPOSE 8080
 
 # Use exec form of CMD to allow graceful shutdown
 CMD ["gunicorn", "--bind", "0.0.0.0:5000", "app:app"]
