@@ -19,7 +19,7 @@ phases:
     commands:
       - echo Creating imagedefinitions.json file...
       - |
-        echo '[{"name":"assignment3","imageUri":"703671936328.dkr.ecr.us-east-1.amazonaws.com/assignment3:latest"}]' > imagedefinitions.json
+        echo '[{"name":"assignment3-flask-container","imageUri":"703671936328.dkr.ecr.us-east-1.amazonaws.com/assignment3:latest"}]' > imagedefinitions.json
 
 artifacts:
   files:
