@@ -5,6 +5,8 @@ WORKDIR /app
 # Copy requirements first for better caching
 COPY requirements.txt .
 
+RUN apt-get update && apt-get install -y build-essential
+
 # Install dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
