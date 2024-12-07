@@ -14,5 +14,8 @@ COPY app.py .
 # Expose port
 EXPOSE 8080
 
+# Ensure gunicorn is executable
+RUN chmod +x /usr/local/bin/gunicorn
+
 # Use exec form of CMD to allow graceful shutdown
 CMD ["gunicorn", "--bind", "0.0.0.0:8080", "app:app"]
